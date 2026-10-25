@@ -6,10 +6,6 @@
   const menuButton = document.querySelector('.menu-toggle');
   const mobileNav = document.getElementById('mobile-nav');
   const tilt = document.getElementById('art-tilt');
-  const form = document.getElementById('inquiry-form');
-  const feedback = document.getElementById('form-feedback');
-  const formNote = document.getElementById('form-note');
-  const submitLabel = document.getElementById('submit-label');
   const config = window.HF_CONFIG || {};
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   if ('IntersectionObserver' in window && !prefersReducedMotion.matches) {
@@ -77,88 +73,41 @@
     parent.addEventListener('pointerleave', () => { tilt.style.transform = ''; });
   }
 
-  const officialEmail = typeof config.email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(config.email.trim()) ? config.email.trim() : '';
-  if (officialEmail) {
-    formNote.textContent = 'Your information stays on your device. We will open your mail app with a prepared message addressed to ' + officialEmail + '. Please review and send it there; this site does not send anything automatically.';
+  // Contact details are always informational. Values render as plain text,
+  // and direct call/email/map links appear only for valid published details.
+  function setDetail(kind, value, href) {
+    const element = document.getElementById('contact-' + kind);
+    const note = document.getElementById('contact-' + kind + '-note');
+    const link = document.getElementById('contact-' + kind + '-link');
+    if (!element || !link) return;
+    const published = Boolean(value);
+    if (published) {
+      element.textContent = value;
+      element.classList.remove('directory-unconfirmed');
+      link.href = href;
+      link.hidden = false;
+    }
+    if (note) note.hidden = published;
   }
 
-  const fields = {
-    name: document.getElementById('inquiry-name'),
-    company: document.getElementById('inquiry-company'),
-    email: document.getElementById('inquiry-email'),
-    message: document.getElementById('inquiry-message')
-  };
-  function setError(key, message) {
-    const element = fields[key];
-    if (!element) return;
-    const error = document.getElementById(key + '-error');
-    if (error) error.textContent = message;
-    if (message) { element.setAttribute('aria-invalid', 'true'); element.setAttribute('aria-describedby', key + '-error'); }
-    else { element.removeAttribute('aria-invalid'); element.removeAttribute('aria-describedby'); }
+  const asText = value => typeof value === 'string' ? value.trim() : '';
+  const phone = asText(config.phone);
+  const phoneHref = /^[+\d\s().-]{5,30}$/.test(phone) ? 'tel:' + phone.replace(/[^+\d]/g, '') : '';
+  const address = asText(config.address || config.location);
+  const email = asText(config.email);
+  const emailHref = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'mailto:' + email : '';
+  // If a field is populated but its syntax cannot be used for a direct link,
+  // show the text rather than constructing an unsafe or broken href.
+  setDetail('phone', phone, phoneHref || '');
+  setDetail('address', address, address ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(address) : '');
+  setDetail('email', email, emailHref || '');
+  if (phone && !phoneHref) document.getElementById('contact-phone-link').hidden = true;
+  if (email && !emailHref) document.getElementById('contact-email-link').hidden = true;
+
+  const person = asText(config.contactPerson);
+  if (person) {
+    document.getElementById('contact-person').textContent = person;
+    document.getElementById('contact-person-entry').hidden = false;
   }
-  function validate() {
-    const name = fields.name.value.trim();
-    const email = fields.email.value.trim();
-    const message = fields.message.value.trim();
-    const errors = {
-      name: name ? '' : 'Please enter your name.',
-      email: !email ? 'Please enter your email address.' : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Please enter a valid email address.' : '',
-      message: message ? '' : 'Please write a short message.'
-    };
-    Object.keys(errors).forEach(key => setError(key, errors[key]));
-    const firstInvalid = Object.keys(errors).find(key => errors[key]);
-    if (firstInvalid) { fields[firstInvalid].focus(); return false; }
-    return true;
-  }
-  Object.entries(fields).forEach(([key, field]) => {
-    if (key !== 'company') field.addEventListener('input', () => { setError(key, ''); feedback.textContent = ''; });
-  });
-  function preparedMessage() {
-    return [
-      'To: Hambazan Farhikhte',
-      'Subject: Business inquiry from ' + fields.name.value.trim(),
-      '',
-      'Name: ' + fields.name.value.trim(),
-      'Organization: ' + (fields.company.value.trim() || 'Not specified'),
-      'Reply-to: ' + fields.email.value.trim(),
-      '',
-      'Message:',
-      fields.message.value.trim()
-    ].join('\n');
-  }
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-    if (!validate()) return;
-    const subject = 'Business inquiry — Hambazan Farhikhte';
-    const body = preparedMessage().replace(/^To: Hambazan Farhikhte\nSubject: [^\n]+\n\n/, '');
-    const href = 'mailto:' + (officialEmail || '') + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    window.location.href = href;
-    feedback.textContent = officialEmail
-      ? 'Your email draft is ready. Review it and press Send in your email application.'
-      : 'Your email draft is ready. Add the recipient address in your email application before sending.';
-  });
-  document.getElementById('copy-inquiry').addEventListener('click', async () => {
-    if (!validate()) return;
-    const message = preparedMessage();
-    try {
-      await navigator.clipboard.writeText(message);
-      feedback.textContent = 'Copied. You can paste the inquiry into your preferred communication channel.';
-    } catch (error) {
-      const selection = document.createElement('textarea');
-      selection.value = message;
-      selection.setAttribute('aria-label', 'Prepared inquiry to copy');
-      selection.style.cssText = 'position:fixed;left:10px;top:10px;width:80%;z-index:200;';
-      document.body.appendChild(selection);
-      selection.focus();
-      selection.select();
-      let copied = false;
-      try { copied = document.execCommand('copy'); } catch (_) { /* manual copy remains available */ }
-      if (copied) {
-        selection.remove();
-        feedback.textContent = 'Copied. You can paste the inquiry into your preferred communication channel.';
-      } else {
-        feedback.textContent = 'Select the prepared message and copy it, then paste it into your communication channel.';
-      }
-    }
-  });
+
 })();
