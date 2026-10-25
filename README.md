@@ -45,7 +45,7 @@ Open `http://localhost:8080`.
 3. Check the **Actions → Deploy website to GitHub Pages** workflow. It will deploy the static site automatically on every push to `main`.
 4. Once deployment completes, the site should be available at `https://parsa-mirsaeed.github.io/h-f/`.
 
-The workflow requests Pages activation with `enablement: true`, but repository settings and Actions permissions may still require an owner to enable GitHub Pages.
+**One-time setup is required:** this deployment workflow does not automatically enable a new Pages site. The repository owner must select **Settings → Pages → Build and deployment → Source: GitHub Actions**. The first workflow run may fail with “Get Pages site failed” until that setting is saved. After enabling Pages, use **Actions → Deploy website to GitHub Pages → Re-run jobs** (or push a new commit).
 
 ## Notes
 
