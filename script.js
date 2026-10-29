@@ -32,14 +32,15 @@
     if (mobileNav.hidden) return;
     mobileNav.hidden = true;
     menuButton.setAttribute('aria-expanded', 'false');
-    menuButton.setAttribute('aria-label', 'Open navigation');
+    menuButton.setAttribute('aria-label', window.HF_I18N?.t('menuOpen') || 'Open navigation');
     if (returnFocus) menuButton.focus();
   }
   menuButton.addEventListener('click', () => {
     const open = mobileNav.hidden;
     mobileNav.hidden = !open;
     menuButton.setAttribute('aria-expanded', String(open));
-    menuButton.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+    menuButton.setAttribute('aria-label', window.HF_I18N?.t(open ? 'menuClose' : 'menuOpen') || (open ? 'Close navigation' : 'Open navigation'));
+    if (open) window.HF_I18N?.close();
   });
   mobileNav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => closeMenu()));
   document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(true); });

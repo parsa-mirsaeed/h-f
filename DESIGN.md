@@ -20,3 +20,22 @@ Replace the original inquiry composer with a quiet, information-led corporate re
 - Navigation is semantic, keyboard accessible, and reduced motion fully respected.
 - Directory remains legible at small widths and 200% zoom; links never appear for unconfigured contact fields.
 - The public site does not capture visitors' personal data or send messages.
+
+## Six-language release (2026)
+
+The page is now available in English (`en`), Russian (`ru`), Persian (`fa-IR`), Simplified Chinese (`zh-CN`), German (`de`) and Arabic (`ar`). Every visible content block, functional label, directory placeholder, navigation state, accessibility label and relevant document metadata is localized with static, reviewed wording in `i18n.js`. We preserve the organization's official Latin-script public name rather than inventing translations or implying unverified legal names. Published contact details from `config.js` are never modified by translation. All language options show native-script endonyms without flag icons.
+
+### Typography and direction
+
+- English: Space Grotesk headlines, DM Sans body, IBM Plex Mono utility.
+- German: Space Grotesk / DM Sans, with text sizing tuned for German compounds.
+- Russian: Manrope for modern Cyrillic business typography.
+- Persian: locally available **Yekan Bakh** as the preferred face and open-source **Vazirmatn** as the web-safe fallback; no unlicensed Yekan Bakh font binaries are copied into the repository.
+- Arabic: IBM Plex Sans Arabic for a contemporary corporate voice.
+- Simplified Chinese: Noto Sans SC with CJK-appropriate tracking, generous line-height, and resilient wraps.
+
+The root `lang` and `dir` are updated together for every locale. Persian and Arabic mirror reading order and major layout alignments, preserving Latin official brand and contact values as separate bidi isolates. Motion and heading scales are tailored by script. The visually composed two-level language picker is accessible via mouse, touch and keyboard, with native-language option names, clear selected state, Arrow/Home/End and Escape operation. The chosen locale is reflected in the `?lang=` URL query parameter (not stored in cookies or local storage), so a translated view can be shared directly. On a fresh URL, browser locale preference is used; otherwise English is the fallback.
+
+## Verification notes
+
+No translation service, dynamic API, or backend is required. JS and CSS syntax and translation-key completeness are tested. Responsive browser verification should be repeated on GitHub Pages, especially narrow-device RTL/CJK reading modes and any separately licensed Persian webfont added later.

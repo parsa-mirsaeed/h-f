@@ -355,3 +355,114 @@ img, svg { max-width: 100%; }
   .hero-eyebrow, .hero h1, .hero-description, .hero-actions, .hero-art, .reveal { opacity: 1 !important; transform: none !important; filter: none !important; }
   .headline-final svg { stroke-dashoffset: 0 !important; }
 }
+
+/* Multilingual design: language is a top-level navigation control, not a modal. */
+.visually-hidden { position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
+.header-actions { justify-self:end;display:flex;align-items:center;gap:12px;min-width:0; }
+.language-switcher { position:relative;z-index:120;flex:none; }
+.language-trigger {display:inline-flex;align-items:center;justify-content:center;gap:9px;height:46px;padding:0 13px;border-radius:999px;border:1px solid rgba(198,217,255,.35);background:rgba(255,255,255,.045);color:#eef5ff;transition:background .25s,border-color .25s,box-shadow .25s;cursor:pointer;}
+.language-trigger:hover,.language-switcher.is-open .language-trigger {background:rgba(180,202,255,.16);border-color:#b9d9ff;box-shadow:0 0 24px rgba(139,220,248,.11);}
+.language-globe {width:18px;height:18px;flex:none;color:#b5daf8;}
+.language-code {font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.065em;min-width:22px;text-align:center;}
+.language-chevron {width:12px;height:12px;transition:transform .25s var(--ease);}
+.language-switcher.is-open .language-chevron {transform:rotate(180deg);}
+.language-panel {position:absolute;top:calc(100% + 15px);inset-inline-end:0;width:325px;max-width:calc(100vw - 28px);border-radius:19px;border:1px solid rgba(193,215,253,.24);background:#151e36;color:#eef5ff;box-shadow:0 28px 85px rgba(0,4,21,.45),inset 0 1px rgba(255,255,255,.08);padding:17px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);animation:languageReveal .24s var(--ease) both;}
+@keyframes languageReveal {from{opacity:0;transform:translateY(-8px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.language-panel-head {display:flex;justify-content:space-between;align-items:center;gap:12px;padding:3px 6px 0;}
+.language-panel-eyebrow,.language-panel-count,.language-panel-foot {font:600 10px/1.5 'IBM Plex Mono',monospace;letter-spacing:.08em;}
+.language-panel-eyebrow {color:#d9e2fa;}
+.language-panel-count {color:#889abc;}
+.language-panel-hint {font:400 12px/1.5 var(--body);color:#a1aecb;margin:7px 6px 16px;}
+.language-options {display:grid;gap:3px;}
+.language-option {display:grid;grid-template-columns:33px minmax(0,1fr) 21px;align-items:center;gap:11px;width:100%;padding:10px 12px;border:1px solid transparent;border-radius:11px;background:transparent;color:#f2f5ff;text-align:left;cursor:pointer;transition:background .2s,border-color .2s,transform .2s;}
+.language-option:hover,.language-option:focus-visible {background:#293451;border-color:#465674;outline-offset:1px;}
+.language-option[aria-selected="true"] {background:linear-gradient(105deg,rgba(112,149,226,.23),rgba(160,135,242,.16));border-color:rgba(177,205,255,.32);}
+.language-option:active {transform:scale(.986);}
+.language-option-code {display:grid;place-items:center;height:30px;border:1px solid #445473;border-radius:7px;color:#aebcda;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.04em;}
+.language-option[aria-selected="true"] .language-option-code {color:#d9f5ff;border-color:#89b5ec;}
+.language-option-names {display:flex;flex-direction:column;gap:2px;min-width:0;}
+.language-option-names > span {font:600 15px/1.35 var(--body);unicode-bidi:isolate;}
+.language-option[data-lang="fa"] .language-option-names > span {font-family:'Yekan Bakh','Vazirmatn',sans-serif;}
+.language-option[data-lang="ar"] .language-option-names > span {font-family:'IBM Plex Sans Arabic',sans-serif;}
+.language-option[data-lang="zh"] .language-option-names > span {font-family:'Noto Sans SC',sans-serif;}
+.language-option[data-lang="ru"] .language-option-names > span {font-family:'Manrope',sans-serif;}
+.language-option-names small {font:400 11px/1.2 'DM Sans',sans-serif;color:#8e9fbe;}
+.language-option-check {color:#a5e8fd;font-size:18px;visibility:hidden;}
+.language-option[aria-selected="true"] .language-option-check {visibility:visible;}
+.language-panel-foot {border-top:1px solid #34415b;color:#8190ab;display:flex;gap:9px;align-items:center;padding:14px 6px 2px;margin-top:10px;}
+.language-foot-dot {height:6px;width:6px;border-radius:50%;background:#9ee1d6;}
+
+/* Script-aware type systems. Yekan Bakh is only used when legally available locally;
+   Vazirmatn is an openly licensed, excellent Persian fallback. */
+html[data-locale="ru"] { --body:'Manrope','DM Sans',sans-serif;--display:'Manrope','Space Grotesk',sans-serif;--mono:'Manrope',sans-serif; }
+html[data-locale="de"] { --body:'DM Sans',sans-serif;--display:'Space Grotesk',sans-serif; }
+html[data-locale="fa"] { --body:'Yekan Bakh','Vazirmatn',sans-serif;--display:'Yekan Bakh','Vazirmatn',sans-serif;--mono:'Yekan Bakh','Vazirmatn',sans-serif; }
+html[data-locale="ar"] { --body:'IBM Plex Sans Arabic',sans-serif;--display:'IBM Plex Sans Arabic',sans-serif;--mono:'IBM Plex Sans Arabic',sans-serif; }
+html[data-locale="zh"] { --body:'Noto Sans SC',sans-serif;--display:'Noto Sans SC',sans-serif;--mono:'Noto Sans SC',sans-serif; }
+html[data-locale="fa"] .eyebrow,html[data-locale="fa"] .section-kicker,html[data-locale="fa"] .hero-footer,html[data-locale="fa"] .art-label,html[data-locale="fa"] .focus-number,html[data-locale="fa"] .contact-status,html[data-locale="fa"] .contact-info-bottom,html[data-locale="fa"] .footer-bottom,html[data-locale="fa"] .back-top,html[data-locale="fa"] .statement-overline,
+html[data-locale="ar"] .eyebrow,html[data-locale="ar"] .section-kicker,html[data-locale="ar"] .hero-footer,html[data-locale="ar"] .art-label,html[data-locale="ar"] .focus-number,html[data-locale="ar"] .contact-status,html[data-locale="ar"] .contact-info-bottom,html[data-locale="ar"] .footer-bottom,html[data-locale="ar"] .back-top,html[data-locale="ar"] .statement-overline {letter-spacing:0;}
+html[data-locale="fa"] .hero h1,html[data-locale="ar"] .hero h1,html[data-locale="zh"] .hero h1 {letter-spacing:-.025em;line-height:1.27;font-weight:600;font-size:clamp(45px,5vw,83px);white-space:normal;}
+html[data-locale="ru"] .hero h1,html[data-locale="de"] .hero h1 {letter-spacing:-.07em;font-size:clamp(50px,5.35vw,96px);}
+html[data-locale="fa"] .headline-final,html[data-locale="ar"] .headline-final,html[data-locale="zh"] .headline-final {white-space:normal;}
+html[data-locale="fa"] .headline-final svg,html[data-locale="ar"] .headline-final svg {bottom:-12px;}
+html[data-locale="fa"] .section-heading,html[data-locale="ar"] .section-heading,html[data-locale="zh"] .section-heading {letter-spacing:-.03em;line-height:1.3;font-weight:600;font-size:clamp(40px,5.2vw,84px);}
+html[data-locale="fa"] .focus-head h2,html[data-locale="ar"] .focus-head h2,html[data-locale="zh"] .focus-head h2 {letter-spacing:-.03em;line-height:1.25;font-size:clamp(46px,5.3vw,88px);}
+html[data-locale="fa"] .statement h2,html[data-locale="ar"] .statement h2,html[data-locale="zh"] .statement h2 {letter-spacing:-.035em;line-height:1.25;font-size:clamp(58px,7.5vw,122px);}
+html[data-locale="fa"] .contact-head h2,html[data-locale="ar"] .contact-head h2,html[data-locale="zh"] .contact-head h2,html[data-locale="ru"] .contact-head h2 {letter-spacing:-.035em;line-height:1.24;font-size:clamp(57px,7vw,113px);}
+html[data-locale="fa"] .contact-info h3,html[data-locale="ar"] .contact-info h3,html[data-locale="zh"] .contact-info h3 {letter-spacing:-.03em;line-height:1.27;font-size:clamp(42px,4.2vw,70px);}
+html[data-locale="fa"] .company-identity h3,html[data-locale="ar"] .company-identity h3,html[data-locale="zh"] .company-identity h3 {font-family:'Space Grotesk',sans-serif;letter-spacing:-.06em;line-height:1.03;}
+html[data-locale="fa"] .focus-card strong,html[data-locale="ar"] .focus-card strong,html[data-locale="zh"] .focus-card strong {line-height:1.3;letter-spacing:-.03em;}
+html[data-locale="fa"] .hero-description,html[data-locale="ar"] .hero-description {line-height:2;}
+html[data-locale="fa"] .section-kicker,html[data-locale="ar"] .section-kicker {line-height:1.7;}
+html[data-locale="zh"] .hero-description,html[data-locale="zh"] .about-aside p,html[data-locale="zh"] .contact-head p {line-height:1.85;}
+html[data-locale="ru"] .statement h2,html[data-locale="de"] .statement h2 {overflow-wrap:anywhere;}
+html[data-locale="ru"] .statement h2 {font-size:clamp(55px,8vw,140px);}
+
+/* RTL is an actual mirrored reading experience, not just right-aligned text. */
+[dir="rtl"] body {text-align:right;}
+[dir="rtl"] .brand,[dir="rtl"] .footer-brand,[dir="rtl"] .brand-name,[dir="rtl"] .contact-info-bottom > span:first-child {direction:ltr;unicode-bidi:isolate;}
+[dir="rtl"] .brand-name,[dir="rtl"] .brand {text-align:left;}
+[dir="rtl"] .desktop-nav,[dir="rtl"] .header-actions {direction:rtl;}
+[dir="rtl"] .hero-art {transform:scaleX(-1);}
+[dir="rtl"] .hero::after {background:linear-gradient(270deg,rgba(16,21,37,.22),transparent);}
+[dir="rtl"] .hero-glow {right:auto;left:-10%;}
+[dir="rtl"] .focus-icon,[dir="rtl"] .button-arrow,[dir="rtl"] .contact-flourish,[dir="rtl"] .statement-cta > span,[dir="rtl"] .inline-arrow-link > span {transform:scaleX(-1);}
+[dir="rtl"] .contact-directory {direction:rtl;}
+[dir="rtl"] .directory-value[dir="auto"] {unicode-bidi:plaintext;}
+[dir="rtl"] #contact-phone:not(.directory-unconfirmed),[dir="rtl"] #contact-email:not(.directory-unconfirmed) {direction:ltr;text-align:right;unicode-bidi:isolate;}
+[dir="rtl"] .language-switcher,[dir="rtl"] .language-panel {direction:ltr;text-align:left;}
+[dir="rtl"] .language-panel-hint {text-align:left;}
+[dir="rtl"] .language-option-names > [dir="rtl"] {text-align:left;}
+[dir="rtl"] .scroll-progress {transform-origin:right center;}
+[dir="rtl"] .hero-art .art-tilt {transform:scaleX(-1);}
+[dir="rtl"] .hero-art {transform:none;}
+@media (max-width:1230px) {
+ .header-actions {gap:10px;}
+}
+@media (max-width:900px) {
+ html[data-locale="fa"] .hero h1,html[data-locale="ar"] .hero h1,html[data-locale="zh"] .hero h1 {font-size:clamp(50px,8vw,74px);}
+ html[data-locale="ru"] .hero h1,html[data-locale="de"] .hero h1 {font-size:clamp(51px,8vw,84px);}
+ [dir="rtl"] .hero-art {right:auto;left:-125px;}
+}
+@media (max-width:650px) {
+ .header-actions {gap:8px;}
+ .language-trigger {height:42px;gap:6px;padding:0 10px;}
+ .language-globe {width:16px;height:16px;}
+ .language-chevron {width:10px;height:10px;}
+ .language-panel {position:fixed;top:83px;left:var(--pad);right:var(--pad);width:auto;max-width:none;max-height:calc(100dvh - 96px);overflow:auto;overscroll-behavior:contain;}
+ .language-option {padding:9px 11px;}
+ html[data-locale="fa"] .hero h1,html[data-locale="ar"] .hero h1,html[data-locale="zh"] .hero h1 {font-size:clamp(37px,9.7vw,62px);line-height:1.3;}
+ html[data-locale="ru"] .hero h1,html[data-locale="de"] .hero h1 {font-size:clamp(39px,10vw,63px);white-space:normal;}
+ html[data-locale="fa"] .section-heading,html[data-locale="ar"] .section-heading,html[data-locale="zh"] .section-heading {font-size:clamp(33px,8vw,52px);}
+ html[data-locale="fa"] .focus-head h2,html[data-locale="ar"] .focus-head h2,html[data-locale="zh"] .focus-head h2 {font-size:clamp(45px,10.7vw,68px);}
+ html[data-locale="fa"] .statement h2,html[data-locale="ar"] .statement h2,html[data-locale="zh"] .statement h2 {font-size:clamp(44px,10.5vw,74px);}
+ html[data-locale="ru"] .statement h2,html[data-locale="de"] .statement h2 {font-size:clamp(45px,10.5vw,72px);}
+ html[data-locale="fa"] .contact-head h2,html[data-locale="ar"] .contact-head h2,html[data-locale="zh"] .contact-head h2,html[data-locale="ru"] .contact-head h2 {font-size:clamp(52px,11vw,86px);}
+ [dir="rtl"] .hero-art {left:-165px;right:auto;}
+}
+@media(max-width:360px){.header-actions{gap:6px}.language-trigger{padding:0 8px;gap:5px}.brand-name{font-size:10px}.brand-name span{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.language-panel{animation:none}.language-trigger,.language-chevron,.language-option{transition:none}}
+html[data-locale="fa"] .hero h1,html[data-locale="ar"] .hero h1,html[data-locale="zh"] .hero h1,html[data-locale="ru"] .hero h1,html[data-locale="de"] .hero h1,
+html[data-locale="fa"] .section-heading,html[data-locale="ar"] .section-heading,html[data-locale="zh"] .section-heading,
+html[data-locale="ru"] .section-heading,html[data-locale="de"] .section-heading,
+html[data-locale="ru"] .statement h2,html[data-locale="de"] .statement h2 { overflow-wrap:anywhere; }
